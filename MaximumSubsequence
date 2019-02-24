@@ -38,5 +38,4 @@ int main()
         i--; j--;
     }
     cout << s;
-
 }
