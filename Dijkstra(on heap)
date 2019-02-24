@@ -52,7 +52,6 @@ int main()
     cout << endl;
     for(i = finish; i != 0; i = pr[i])
         cout << i << ' ';
-
     fclose(in);
     fclose(out);
     return 0;
