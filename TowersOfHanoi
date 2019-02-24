@@ -1,0 +1,27 @@
+// ханойские башни
+#include <iostream>
+
+using namespace std;
+
+void H(long n, long a, long b)
+{
+    if (n > 0)
+    {
+        H(n - 1, a, 6 - a - b);
+        //cout << a << " -> " << b << endl;
+        H(n - 1, 6 - a - b, b);
+    }
+}
+
+int main()
+{
+    long n, i;
+    unsigned long long a[100];
+    cin >> n;
+    H(n, 1, 2);
+    a[0] = 0;
+    for (i = 1; i <= n; i++)
+        a[i] = 2*a[i-1] + 1;
+    cout << a[n] << " " << ((1 << n) - 1);
+    return 0;
+}
