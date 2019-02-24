@@ -1,0 +1,54 @@
+// найти кратчайший путь во взвешенном неориентированном графе
+// методом Дейкстра без кучи
+#include <cstdio>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+const long INF = 999999999;
+long v, r, i, j, Min, start, finish, x, y, z, L[1001], p[1001], pr[1001];
+vector <pair<long, long> > a[1001];
+
+int main()
+{
+    FILE *in = fopen("input.txt", "rt");
+    FILE *out = fopen("output.txt", "wt");
+    fscanf(in, "%d%d", &v, &r);
+    //fprintf(out, "%d %d", v, t);
+    for(i = 0; i < r; i++)
+    {
+        fscanf(in, "%d%d%d", &x, &y, &z);
+        a[x].push_back(make_pair(y, z));
+        a[y].push_back(make_pair(x, z));
+    }
+    for(i = 1; i <= v; i++)
+        L[i] = INF;
+    start = 1; finish = v;
+    L[start] = 0; pr[start] = 0;
+    i = start;
+    do
+    {
+        p[i] = 1;
+        for(j = 0; j < a[i].size(); j++)
+            if(p[a[i][j].first] == 0)
+                if (L[a[i][j].first] > L[i] + a[i][j].second)
+                {
+                    L[a[i][j].first] = L[i] + a[i][j].second;
+                    pr[a[i][j].first] = i;
+                }
+        Min = INF;
+        for(j = 1; j <= v; j++)
+            if(p[j] == 0 && L[j] < Min)
+                Min = L[i = j];
+    } while(Min != INF);
+    for(i = 1; i <= v; i++)
+        cout << L[i] << ' ';
+    cout << endl;
+    for(i = finish; i != 0; i = pr[i])
+        cout << i << ' ';
+
+    fclose(in);
+    fclose(out);
+    return 0;
+}
