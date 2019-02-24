@@ -1,0 +1,43 @@
+// найти кратчайшие пути от всех до всех методом Флойда
+#include <cstdio>
+#include <iostream>
+
+using namespace std;
+
+const long INF = 999999999;
+long v, r, i, j, k, Min, start, finish, cur_d, x, y, z, L[1001], p[1001], pr[1001];
+long a[1001][1001];
+int main()
+{
+    FILE *in = fopen("input.txt", "rt");
+    FILE *out = fopen("output.txt", "wt");
+    fscanf(in, "%d%d", &v, &r);
+    //fprintf(out, "%d %d", v, t);
+    for (i = 1; i <= v; i++)
+        for (j = 1; j <= v; j++)
+            a[i][j] = INF;
+    for(i = 0; i < r; i++)
+    {
+        fscanf(in, "%d%d%d", &x, &y, &z);
+        a[x][y] = a[y][x] = z;
+    }
+    for (k = 1; k <= v; k++)
+        for (i = 1; i <= v; i++)
+            for (j = 1; j <= v; j++)
+                if (i != j)
+                    a[i][j] = min(a[i][j], a[i][k] + a[k][j]);
+    for(i = 1; i <= v; i++)
+    {
+        for(j = 1; j <= v; j++)
+            if (a[i][j] == INF)
+                cout << "0 ";
+            else
+                cout << a[i][j] << ' ';
+        cout << endl;
+    }
+
+
+    fclose(in);
+    fclose(out);
+    return 0;
+}
