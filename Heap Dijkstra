@@ -1,0 +1,59 @@
+// найти кратчайший путь во взвешенном неориентированном графе
+// методом Дейкстра с кучей
+#include <cstdio>
+#include <vector>
+#include <iostream>
+#include <queue>
+#include <functional>
+
+using namespace std;
+
+const long INF = 999999999;
+long v, r, i, j, Min, start, finish, cur_d, x, y, z, L[1001], p[1001], pr[1001];
+vector <pair<long, long> > a[1001];
+
+priority_queue <pair <long, long> > pq;
+
+int main()
+{
+    FILE *in = fopen("input.txt", "rt");
+    FILE *out = fopen("output.txt", "wt");
+    fscanf(in, "%d%d", &v, &r);
+    //fprintf(out, "%d %d", v, t);
+    for(i = 0; i < r; i++)
+    {
+        fscanf(in, "%d%d%d", &x, &y, &z);
+        a[x].push_back(make_pair(y, z));
+        a[y].push_back(make_pair(x, z));
+    }
+    for(i = 1; i <= v; i++)
+        L[i] = INF;
+    start = 1; finish = v;
+    L[start] = 0; pr[start] = 0;
+    pq.push(make_pair(0, start));
+    while (!pq.empty())
+    {
+        i = pq.top().second; cur_d = -pq.top().first; pq.pop();
+        if (cur_d > L[i]) continue;
+        //p[i] = 1;
+        for(j = 0; j < a[i].size(); j++)
+        {
+            long to = a[i][j].first, len = a[i][j].second;
+            if (L[to] > L[i] + len)
+                {
+                    L[to] = L[i] + len;
+                    pr[to] = i;
+                    pq.push(make_pair(-L[to], to));
+                }
+        }
+    }
+    for(i = 1; i <= v; i++)
+        cout << L[i] << ' ';
+    cout << endl;
+    for(i = finish; i != 0; i = pr[i])
+        cout << i << ' ';
+
+    fclose(in);
+    fclose(out);
+    return 0;
+}
