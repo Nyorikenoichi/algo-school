@@ -1,0 +1,42 @@
+// поиск максимальной общей подпоследовательности 
+#include <iostream>
+#include <cstdlib>
+#include <string>
+using namespace std;
+
+long a[1010][1010], i, j, n, m;
+
+int main()
+{
+    string s1, s2, s;
+    getline(cin, s1);
+    getline(cin, s2);
+    n = s1.length();
+    m = s2.length();
+    for(i = 1; i <= n; i++)
+        for(j = 1; j <= m; j++)
+            if(s1[i-1] == s2[j-1])
+                a[i][j] = a[i-1][j-1] + 1;
+            else
+                a[i][j] = max(a[i-1][j], a[i][j-1]);
+    for(i = 0; i <= n; i++)
+        {
+            for(j = 0; j <= m; j++)
+                cout << a[i][j] << ' ';
+            cout << endl;
+        }
+    cout << a[n][m] << endl;
+
+    i = n; j = m;
+    while (a[i][j] > 0)
+    {
+        while (a[i][j] == a[i][j-1])
+            j--;
+        while (a[i][j] == a[i-1][j])
+            i--;
+        s = s2[j - 1] + s;
+        i--; j--;
+    }
+    cout << s;
+
+}
