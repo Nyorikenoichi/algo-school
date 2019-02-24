@@ -1,0 +1,157 @@
+// задача о рюкзаке с уникальными неделимыми предметами
+#include <iostream>
+#include <stack>
+using namespace std;
+
+long a[1001][1001], m[1001], c[1001], v, n, i, j;
+
+stack <long> b;
+
+int main()
+{
+    cin >> n >> v;
+    for(i = 1; i <= n; i++)
+    {
+        cin >> m[i] >> c[i];
+    }
+    for(i = 1; i <= n; i++)
+        for(j = 1; j <= v; j++)
+        {
+            a[i][j] = max(a[i][j - 1], a[i - 1][j]);
+            if (m[i] <= j && a[i][j] < a[i-1][j-m[i]] + c[i])
+                a[i][j] = a[i-1][j-m[i]] + c[i];
+        }
+    cout << a[n][v] << endl;
+    i = n; j = v;
+    while (a[i][j] > 0)
+    {
+        while(a[i][j] == a[i-1][j])
+            i--;
+        while(a[i][j] == a[i][j-1])
+            j--;
+        b.push(i);
+        j -= m[i]; i--;
+    }
+    while (!b.empty())
+    {
+        cout << b.top() << ' ';
+        b.pop();
+    }
+    return 0;
+}
+// задача о рюкзаке с неуникальными неделимыми предметами
+#include <iostream>
+#include <stack>
+using namespace std;
+
+long a[1001][1001], m[1001], c[1001], v, n, i, j;
+
+stack <long> b;
+
+int main()
+{
+    cin >> n >> v;
+    for(i = 1; i <= n; i++)
+    {
+        cin >> m[i] >> c[i];
+    }
+
+    for(i = 1; i <= n; i++)
+        for(j = 1; j <= v; j++)
+        {
+            a[i][j] = max(a[i][j - 1], a[i - 1][j]);
+            if (m[i] <= j && a[i][j] < a[i][j-m[i]] + c[i])
+                a[i][j] = a[i][j-m[i]] + c[i];
+        }
+
+    cout << a[n][v] << endl;
+    i = n; j = v;
+    while (a[i][j] > 0)
+    {
+        while(a[i][j] == a[i-1][j])
+            i--;
+        while(a[i][j] == a[i][j-1])
+            j--;
+        b.push(i);
+        j -= m[i];
+        if(a[i][j-m[i]] != a[i][j] - c[i])
+            i--;
+    }
+    while (!b.empty())
+    {
+        cout << b.top() << ' ';
+        b.pop();
+    }
+    return 0;
+}
+// задача о рюкзаке с неуникальными делимыми предметами
+#include <iostream>
+#include <stack>
+using namespace std;
+
+long a[1001][1001], m[1001], c[1001], v, n, i, j;
+double Max;
+
+stack <long> b;
+
+int main()
+{
+    cin >> n >> v;
+    for(i = 1; i <= n; i++)
+    {
+        cin >> m[i] >> c[i];
+    }
+    Max = (double) c[1] / m[1];
+    for (i = 2; i <= n; i++)
+        if ((double)c[i] / m[i] > Max)
+            Max = (double) c[i] / m[i];
+    Max *= v;
+    cout << Max;
+    return 0;
+}
+// задача о рюкзаке с уникальными делимыми предметами
+#include <iostream>
+#include <algorithm>
+#include <iomanip>
+using namespace std;
+
+struct item
+{
+    long m, c;
+};
+
+item a[1001];
+long  v, n, i, j;
+double t, v1, c1;
+
+bool comp(item a, item b)
+{
+    return ((double)a.c/a.m > (double)b.c/b.m);
+}
+
+int main()
+{
+    cin >> n >> v;
+    for(i = 1; i <= n; i++)
+    {
+        cin >> a[i].m >> a[i].c;
+    }
+
+    sort(a+1, a+n+1, comp);
+    for(i = 1; i <= n; i++)
+    {
+        cout << a[i].m << ' ' << a[i].c << endl;
+    }
+    i = 1; c1 = v1 = 0;
+    while (v1 < v && i <= n)
+    {
+        t = min((double)a[i].m, v - v1);
+        v1 += t;
+        c1 += t * (double) a[i].c / a[i].m;
+        i++;
+    }
+    cout << fixed << setprecision(10);
+    cout << c1;
+    return 0;
+}
+
