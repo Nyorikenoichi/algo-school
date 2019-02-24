@@ -1,0 +1,72 @@
+#include <iostream>
+#include <cmath>
+#include <stdio.h>
+
+using namespace std;
+
+long n, a[200000], t[500000], m, Q, L, R;
+
+long gcd(long x, long y)
+{
+    if(x == 0)
+        return y;
+    else
+        gcd(y % x, x);
+}
+
+void b(long v, long tl, long tr)
+{
+    long tm = (tl + tr) / 2;
+	if (tl == tr)
+		t[v] = a[tl];
+	else
+    {
+		b(v*2, tl, tm);
+		b(v*2+1, tm+1, tr);
+		t[v] = gcd(t[v*2], t[v*2+1]);
+	}
+}
+
+long find_gcd(long v, long tl, long tr, long l, long r)
+{
+    long tm = (tl + tr) / 2;
+	if (l > r)
+		return 0;
+	if (l == tl && r == tr)
+		return t[v];
+	return gcd(find_gcd(v*2, tl, tm, l, min(r,tm)), find_gcd(v*2+1, tm+1, tr, max(l,tm+1), r));
+}
+
+void upd(long v, long tl, long tr, long pos, long nv)
+{
+    if(tl == tr)
+        t[v] = nv;
+    else
+    {
+        long tm = (tl + tr) / 2;
+        if (pos <= tm)
+			upd(v*2, tl, tm, pos, nv);
+		else
+			upd(v*2+1, tm+1, tr, pos, nv);
+		t[v] = gcd(t[v*2], t[v*2+1]);
+    }
+}
+
+int main()
+{
+    scanf("%d" ,&n);
+    for(long i = 0; i < n; i++)
+        scanf("%d", &a[i]);
+    b(1, 0, n-1);
+    scanf("%d", &m);
+    for(long i = 0; i < m; i++)
+    {
+        scanf("%d %d %d" ,&Q, &L, &R);
+
+        if(Q == 1)
+            printf("%d\n",find_gcd(1, 0, n-1, L-1, R-1));
+        else
+            upd(1, 0, n-1, L-1, R);
+    }
+    return 0;
+}
