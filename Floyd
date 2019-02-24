@@ -35,8 +35,7 @@ int main()
                 cout << a[i][j] << ' ';
         cout << endl;
     }
-
-
+    
     fclose(in);
     fclose(out);
     return 0;
