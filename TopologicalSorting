@@ -65,7 +65,6 @@ int main()
             ts(i);
         }
     }
-
     fin.close();
     fout.close();
     return 0;
