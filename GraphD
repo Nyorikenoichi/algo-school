@@ -1,0 +1,60 @@
+// найти диаметр невзвешенного неориентированного связного графа
+#include <fstream>
+#include <cstdio>
+#include <vector>
+#include <queue>
+#include <iostream>
+
+using namespace std;
+
+long v, r, i, j, x, y;
+vector <long> a[1001];
+
+
+long bfs(long start)
+{
+    long L[1001] = {0}, p[1001] = {0};
+    queue <long> q;
+    q.push(start);
+    L[start] = 0; p[start] = 0;
+    while(!q.empty())
+    {
+        long x = q.front();
+        q.pop();
+        for(long i = 0; i < a[x].size(); i++)
+            if (p[a[x][i]] == 0)
+            {
+                p[a[x][i]] = 1;
+                L[a[x][i]] = L[x] + 1;
+                q.push(a[x][i]);
+            }
+    }
+    long Max = 0;
+    for(long i = 1; i <= v; i++)
+        Max = max(Max, L[i]);
+    return Max;
+}
+
+int main()
+{
+    FILE *in = fopen("input.txt", "rt");
+    FILE *out = fopen("output.txt", "wt");
+    fscanf(in, "%d%d", &v, &r);
+    //fprintf(out, "%d %d", v, t);
+    for(i = 0; i < r; i++)
+    {
+        fscanf(in, "%d%d", &x, &y);
+        a[x].push_back(y);
+        a[y].push_back(x);
+    }
+    x = 0;
+    for(i = 1; i <= v; i++)
+    {
+        x = max(x, bfs(i));
+    }
+    cout << x;
+
+    fclose(in);
+    fclose(out);
+    return 0;
+}
