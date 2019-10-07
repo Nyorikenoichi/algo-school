@@ -1,0 +1,32 @@
+/// перестановка по номеру
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+unsigned long long n, m, k, i, f[100], s[1000];
+
+int main()
+{
+    cin >> n >> m;
+    for (i = 0; i < n; i++)
+        cin >> s[i];
+    sort(s, s + n);
+    f[0] = f[1] = 1;
+    for (i = 2; i < 21; i++)
+        f[i] = f[i - 1] * i;
+    i = 20;
+    while(m > 0)
+    {
+        for(; f[i] > m; i--);
+        k = n - i - 1;
+        swap(s[k], s[k + m / f[i]]);
+        sort(s + k + 1, s + n);
+        m %= f[i];
+    }
+    for(int j = 0; j < n; j++)
+        cout << s[j] << ' ';
+    return 0;
+}
