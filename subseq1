@@ -1,0 +1,34 @@
+//Максимальная возрастающая подпоследовательность O(n^2)
+#include <bits/stdc++.h>
+
+using namespace std;
+
+unsigned long long a[10000], L[10000], pr[10000], n, i = 2, j, m, nm;
+
+int main()
+{
+    freopen("input.txt", "r", stdin);
+    cin >> n;
+    for(i = 0; i < n; i++)
+    {
+        cin >> a[i];
+        L[i] = 1;
+        pr[i] = -1;
+    }
+    for(i = 1; i < n; i++)
+    {
+        nm = -1;
+        for(j = 0; j < i; j++)
+            if(a[j] < a[i] && L[j] > L[nm])
+                nm = j;
+
+        if(nm != -1)
+        {
+            L[i] = L[nm] + 1;
+            pr[i] = nm;
+        }
+    }
+    for(i = 0; i < n; i++)
+        cout << L[i] << ' ';
+    return 0;
+}
