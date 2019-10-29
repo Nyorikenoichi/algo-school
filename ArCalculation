@@ -1,0 +1,112 @@
+//вычисление арифметического выражения
+#include <bits/stdc++.h>
+
+using namespace std;
+
+string s;
+stack <char> so;
+stack <long> sd;
+long i, j, x, y;
+bool number = false;
+char c;
+
+int main()
+{
+    cin >> s;
+    for(i = 0; i < s.length(); i++)
+        if(s[i] >= '0' && s[i] <= '9')
+            if (number)
+                x = x * 10 + s[i] - '0';
+            else
+            {
+                x = s[i] - '0';
+                number = true;
+            }
+        else
+        {
+            if(number)
+            {
+                sd.push(x);
+                number = false;
+            }
+            switch(s[i])
+            {
+                case '(': so.push(s[i]); break;
+                case '+':
+                case '-': while(!so.empty() && (so.top() == '+' ||
+                                so.top() == '-' || so.top() == '*' ||
+                                so.top() == '/'))
+                        {
+                            c = so.top(); so.pop();
+                            y = sd.top(); sd.pop();
+                            x = sd.top(); sd.pop();
+                            switch(c)
+                            {
+                                case '+': sd.push(x + y); break;
+                                case '-': sd.push(x - y); break;
+                                case '*': sd.push(x * y); break;
+                                case '/': sd.push(x / y); break;
+                            }
+                        }
+                        so.push(s[i]); break;
+                case '*':
+                case '/': while(!so.empty() && (so.top() == '*' ||
+                                so.top() == '/'))
+                        {
+                            c = so.top(); so.pop();
+                            y = sd.top(); sd.pop();
+                            x = sd.top(); sd.pop();
+                            switch(c)
+                            {
+                                case '*': sd.push(x * y); break;
+                                case '/': sd.push(x / y); break;
+                            }
+                        }
+                        so.push(s[i]); break;
+                case ')': c = so.top(); so.pop();
+                        while(c != '(')
+                         {
+                            y = sd.top(); sd.pop();
+                            x = sd.top(); sd.pop();
+                            switch(c)
+                            {
+                                case '+': sd.push(x + y); break;
+                                case '-': sd.push(x - y); break;
+                                case '*': sd.push(x * y); break;
+                                case '/': sd.push(x / y); break;
+                            }
+                            c = so.top(); so.pop();
+                        }
+            }
+        }
+    if(number)
+    {
+        sd.push(x);
+        number = false;
+    }
+    while(!so.empty())
+    {
+        c = so.top(); so.pop();
+        y = sd.top(); sd.pop();
+        x = sd.top(); sd.pop();
+        switch(c)
+        {
+            case '+': sd.push(x + y); break;
+            case '-': sd.push(x - y); break;
+            case '*': sd.push(x * y); break;
+            case '/': sd.push(x / y); break;
+        }
+    }
+    while(!sd.empty())
+    {
+        cout << sd.top() << ' ';
+        sd.pop();
+    }
+    cout << endl;
+    while(!so.empty())
+    {
+        cout << so.top() << ' ';
+        so.pop();
+    }
+    return 0;
+}
