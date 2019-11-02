@@ -1,0 +1,28 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+long n, m, i, x;
+set <long> a, b, ans;
+set <long>::iterator it;
+int main()
+{
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    cin >> n >> m;
+    for(i = 0; i < n; i++)
+    {
+        cin >> x;
+        a.insert(x);
+    }
+    for(i = 0; i < m; i++)
+    {
+        cin >> x;
+        b.insert(x);
+    }
+    set_intersection(a.begin(), a.end(), b.begin(), b.end(), inserter(ans, ans.begin()));
+    for(it = ans.begin(); it != ans.end(); it++)
+        cout << *it << ' ';
+    return 0;
+}
