@@ -1,0 +1,11 @@
+class cmp
+{
+public:
+    bool operator() (long x, long y)
+    {
+        return x < y;
+    }
+};
+
+
+priority_queue < long, vector<long> >, cmp > q;
