@@ -69,3 +69,68 @@ int main()
     fout.close();
     return 0;
 }
+// Вариант 2
+#include <bits/stdc++.h>
+
+using namespace std;
+
+vector <long> g[5000];
+vector <long> p;
+long a, v, r, x, y;
+bool c;
+
+void dfsProverka(long x)
+{
+    p[x] = 1;
+    for(long i = 0; i < g[x].size(); i++)
+        if(p[ g[x][i] ] == 0)
+            dfsProverka(g[x][i]);
+        else if(p[ g[x][i] ] == y)
+            c = 1;
+    return;
+}
+
+void dfs(long x)
+{
+    if(p[x] != 0)
+        return;
+    p[x] = 1;
+    for(long i = 0; i < g[x].size(); i++)
+        if(p[ g[x][i] ] == 0)
+            dfs(g[x][i]);
+    cout << x << ' ';
+    return;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(0);
+    freopen("input.txt", "r", stdin);
+    cin >> v >> r;
+    p.resize(v);
+    for(long i = 1; i <= v; i++)
+        p[i] = 0;
+    for(long i = 1; i <= r; i++)
+    {
+        cin >> x >> y;
+        g[y].push_back(x);
+    }
+    y = 0;
+    for(long i = 1; i <= v; i++)
+    {
+        if(p[i] != 0)
+        {
+            y++;
+            dfsProverka(i);
+        }
+    }
+    for(long i = 1; i <= v; i++)
+        p[i] = 0;
+    if(c)
+        cout << -1;
+    else for(long i = 1; i <= v; i++)
+    {
+        dfs(i);
+    }
+    return 0;
+}
