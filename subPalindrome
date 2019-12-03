@@ -1,0 +1,46 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+short int a[10002][10002], n, m, i, j, ans;
+string s1, s2, p;
+
+int main()
+{
+    ios_base::sync_with_stdio(0);
+    //freopen("input.txt", "r", stdin);
+    //freopen("output.txt", "w", stdout);
+    cin >> s1;
+    n = s1.length();
+    for(i = 0; i < n; i++)
+        s2 = s1[i] + s2;
+    cout << s2 << endl;
+    for(i = 1; i <= n; i++)
+        for(j = 1; j <= n; j++)
+            if(s1[i - 1] == s2[j - 1])
+                a[i][j] = a[i - 1][j - 1] + 1;
+            else
+                a[i][j] = max(a[i - 1][j], a[i][j - 1]);
+    for(i = 1; i <= n; i++)
+    {
+        for(j = 1; j <= n; j++)
+            cout << a[i][j] << ' ';
+        cout << endl;
+    }
+    cout << a[n][n] << endl;
+    i = j = n;
+    while(p.length() < (a[n][n] + 1) / 2)
+    {
+        while(a[i][j] == a[i - 1][j])
+            i--;
+        while(a[i][j] == a[i][j - 1])
+            j--;
+        p = p + s1[i - 1];
+        i--; j--;
+    }
+    cout << p;
+    for(i = a[n][n] / 2 - 1; i >= 0; i--)
+        cout << p[i];
+    return 0;
+}
