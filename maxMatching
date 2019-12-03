@@ -1,0 +1,64 @@
+//Нахождение максимального паросочетания O(n * m)
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int v, r, g[1001][1001], p[1001], i, j, x, y, z, ans;
+
+int main()
+{
+    ios_base::sync_with_stdio(0);
+    freopen("input.txt", "r", stdin);
+    //freopen("output.txt", "w", stdout);
+    cin >> v >> r;
+    for(i = 1; i <= r; i++)
+    {
+        cin >> x >> y;
+        g[x][y] = g[y][x] = 1;
+    }
+    for(i = 1; i <= v; i++)
+        if(p[i] == 0)
+        {
+            queue <int> q;
+            vector <int> p2(v + 1);
+            vector <int> pr(v + 1);
+            q.push(i); p2[i] = 1;
+            while(!q.empty())
+            {
+                x = q.front(); q.pop();
+                for(j = 1; j <= v; j++)
+                    if(p2[j] == 0 && g[x][j] == p2[x])
+                    {
+                        q.push(j);
+                        p2[j] = 3 - p2[x];
+                        pr[j] = x;
+                    }
+                if(p[x] == 0 && p2[x] == 2)
+                {
+                    p[x] = p[i] = 1;
+                    for(; x != i; x = pr[x])
+                        g[pr[x]][x] = g[x][pr[x]] = 3 - g[x][pr[x]];
+                    break;
+                }
+            }
+        }
+/*
+    for(i = 1; i <= v; i++)
+    {
+        for(j = 1; j <= v; j++)
+            cout << g[i][j] << ' ';
+        cout << endl;
+    }
+*/
+    ans = 0;
+    for(i = 1; i <= v; i++)
+        for(j = i + 1; j <= v; j++)
+            if(g[i][j] == 2)
+            {
+                ans++;
+                cout << i << ' ' << j << endl;
+            }
+    cout << ans;
+
+    return 0;
+}
