@@ -1,0 +1,63 @@
+// Максимальный поток методом Форда-Фалкерсона
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int INF = 1000000000;
+int g[1001][1001], f[1001][1001];
+int v, r, i, j, x, y, z, start = 1, finish, ans;
+
+int main()
+{
+    ios_base::sync_with_stdio(0);
+    freopen("input.txt", "r", stdin);
+    //freopen("output.txt", "w", stdout);
+    cin >> v >> r;
+    for(i = 1; i <= r; i++)
+    {
+        cin >> x >> y >> z;
+        g[x][y] = z;
+    }
+    finish = v;
+    do
+    {
+        vector <int> L(v + 1);
+        vector <int> p(v + 1);
+        vector <int> pr(v + 1);
+        queue <int> q;
+        L[start] = INF;
+        q.push(start);
+        p[start] = 1;
+        while(!q.empty())
+        {
+            x = q.front();
+            q.pop();
+            if (x == finish)
+            {
+                for(; x != start; x = pr[x])
+                    if (f[x][pr[x]] < 0)
+                        f[x][pr[x]] -= L[finish];
+                    else
+                        f[pr[x]][x] += L[finish];
+                break;
+            }
+            for(i = 1; i <= v; i++)
+                if(p[i] == 0 && (g[x][i] > f[x][i] || f[i][x] > 0))
+                {
+                    p[i] = 1;
+                    q.push(i);
+                    pr[i] = x;
+                    if (f[i][x] > 0)
+                        L[i] = min(L[x], f[i][x]);
+                    else
+                        L[i] = min(L[x], g[x][i] - f[x][i]);
+                }
+        }
+        z = L[finish];
+    }while(z > 0);
+    x = 0;
+    for(i = 1; i <= v; i++)
+        x += f[start][i];
+    cout << x;
+    return 0;
+}
