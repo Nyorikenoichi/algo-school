@@ -1,0 +1,59 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int n, m, a[100005], t[500005];
+
+int gcd(int x, int y)
+{
+    while(x != 0 && y != 0)
+        if(x > y)
+            x %= y;
+        else
+            y %= x;
+    return x + y;
+}
+
+void build(int v, int L, int R)
+{
+    int S = (L + R) / 2;
+    if(L == R)
+        t[v] = a[L];
+    else
+    {
+        build(v * 2, L, S);
+        build(v * 2 + 1, S + 1, R);
+        t[v] = gcd(t[v * 2], t[v * 2 + 1]);
+    }
+}
+
+int get_gcd(int v, int L, int R, int tL, int tR)
+{
+    int S = (L + R) / 2;
+    if(tL > tR)
+        return 0;
+    if(L == tL && R == tR)
+        return t[v];
+    return gcd(get_gcd(v * 2, L, S, tL, min(tR, S)),
+               get_gcd(v * 2 + 1, S + 1, R, max(tL, S + 1), tR));
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
+    freopen("input.txt", "rt", stdin);
+    freopen("output.txt", "wt", stdout);
+    cin >> n;
+    for(int i = 0; i < n; i++)
+        cin >> a[i];
+    build(1, 0, n - 1);
+    cin >> m;
+    while(m--)
+    {
+        int l, r;
+        cin >> l >> r;
+        cout << get_gcd(1, 0, n - 1, l - 1, r - 1) << ' ';
+    }
+    return 0;
+}
