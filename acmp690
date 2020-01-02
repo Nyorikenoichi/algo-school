@@ -1,0 +1,68 @@
+#include <bits/stdc++.h>
+ 
+#define x first
+#define y second
+ 
+using namespace std;
+ 
+vector < pair<int, int> > go =
+{
+    {2, -1}, {2, 1}, {1, -2}, {1, 2}, {-1, -2}, {-1, 2}, {-2, -1}, {-2, 1}
+};
+int n, m, i, j, si, sj, a[200][200];
+bool f = true;
+char c;
+ 
+void dfs(int x, int y, int step)
+{
+    a[x][y] = step;
+    if(step == n * m)
+    {
+        f = false;
+        for(i = 2; i < n + 2; i++)
+            for(j = 2; j < m + 2; j++)
+                cout << a[i][j] << " \n"[j == m + 1];
+        return;
+    }
+    vector < pair<int, int> > v;
+    for(auto it(go.begin()); it != go.end(); it++)
+        if(a[x + it->x][y + it->y] == 0)
+            v.push_back
+            ({
+                count_if(go.begin(), go.end(), [&](pair<int, int> p)
+                {
+                    return !a[x + it->x + p.x][y + it->y + p.y];
+                }),
+                it - go.begin()
+            });
+    auto k = min_element(v.begin(), v.end());
+    if(k != v.end())
+        dfs(x + go[k->y].x, y + go[k->y].y, step + 1);
+    a[x][y] = 0;
+}
+ 
+int main()
+{
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
+    freopen("input.txt", "rt", stdin);
+    srand(time(0));
+    cin >> n >> m;
+    for(i = 0; i <= n + 4; i++)
+        for(j = 0; j <= m + 4; j++)
+            a[i][j] = -1;
+    for(i = 0; i < n; i++)
+        for(j = 0; j < m; j++)
+        {
+            cin >> c;
+            if(c == 'K')
+                si = i + 2, sj = j + 2;
+            a[i + 2][j + 2] = 0;
+        }
+    while(f)
+    {
+        random_shuffle(go.begin(), go.end());
+        dfs(si, sj, 1);
+    }
+    return 0;
+}
