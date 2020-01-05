@@ -1,5 +1,4 @@
 // Топологическая сортировка ориентированного графа
-
 #include <iostream>
 #include <fstream>
 #include <vector>
