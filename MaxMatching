@@ -59,6 +59,5 @@ int main()
                 cout << i << ' ' << j << endl;
             }
     cout << ans;
-
     return 0;
 }
