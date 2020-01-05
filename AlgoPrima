@@ -1,5 +1,4 @@
 //минимальное остовное дерево и его вес методом Прима
-
 #include <iostream>
 #include <cstdio>
 #include <queue>
