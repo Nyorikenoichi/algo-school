@@ -1,58 +1,59 @@
-// найти кратчайший путь во взвешенном неориентированном графе
-// методом Дейкстра с кучей
-#include <cstdio>
-#include <vector>
-#include <iostream>
-#include <queue>
-#include <functional>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-const long INF = 999999999;
-long v, r, i, j, Min, start, finish, cur_d, x, y, z, L[1001], p[1001], pr[1001];
-vector <pair<long, long> > a[1001];
+#define ll long long
 
-priority_queue <pair <long, long> > pq;
+class cmp
+{
+public:
+    bool operator() (pair<ll, ll> x, pair<ll, ll> y)
+    {
+        return x.second > y.second;
+    }
+};
+
+const ll INF = 2009000999;
+ll n, m, s, i, x, y, z, from, cur_d;
+vector<ll> d, pr;
+priority_queue< pair<ll, ll>, vector< pair<ll, ll> >, cmp > pq;
 
 int main()
 {
-    FILE *in = fopen("input.txt", "rt");
-    FILE *out = fopen("output.txt", "wt");
-    fscanf(in, "%d%d", &v, &r);
-    //fprintf(out, "%d %d", v, t);
-    for(i = 0; i < r; i++)
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
+    freopen("input.txt", "rt", stdin);
+    cin >> n >> m >> s;
+    d.resize(n); pr.resize(n, -1);
+    vector< pair<ll, ll> > g[n];
+    for(i = 0; i < m; i++)
     {
-        fscanf(in, "%d%d%d", &x, &y, &z);
-        a[x].push_back(make_pair(y, z));
-        a[y].push_back(make_pair(x, z));
+        cin >> x >> y >> z;
+        g[x].push_back({y, z});
+        g[y].push_back({x, z});
     }
-    for(i = 1; i <= v; i++)
-        L[i] = INF;
-    start = 1; finish = v;
-    L[start] = 0; pr[start] = 0;
-    pq.push(make_pair(0, start));
-    while (!pq.empty())
+    for(i = 0; i < n; i++)
+        d[i] = INF;
+    d[s] = 0;
+    pq.push({s, 0});
+    while(!pq.empty())
     {
-        i = pq.top().second; cur_d = -pq.top().first; pq.pop();
-        if (cur_d > L[i]) continue;
-        //p[i] = 1;
-        for(j = 0; j < a[i].size(); j++)
-        {
-            long to = a[i][j].first, len = a[i][j].second;
-            if (L[to] > L[i] + len)
-                {
-                    L[to] = L[i] + len;
-                    pr[to] = i;
-                    pq.push(make_pair(-L[to], to));
-                }
-        }
+        from = pq.top().first; cur_d = pq.top().second;
+        pq.pop();
+        if(d[from] < cur_d)
+            continue;
+        for(auto to : g[from])
+            if(d[to.first] > d[from] + to.second)
+            {
+                d[to.first] = d[from] + to.second;
+                pr[to.first] = from;
+                pq.push({to.first, d[to.first]});
+            }
     }
-    for(i = 1; i <= v; i++)
-        cout << L[i] << ' ';
+    for(i = 0; i < n; i++)
+        cout << d[i] << ' ';
     cout << endl;
-    for(i = finish; i != 0; i = pr[i])
+    for(i = 0; i != -1; i = pr[i])
         cout << i << ' ';
-    fclose(in);
-    fclose(out);
     return 0;
 }
