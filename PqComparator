@@ -7,4 +7,4 @@ public:
     }
 };
 
-priority_queue < long, vector<long> >, cmp > q;
+priority_queue < long, vector<long> , cmp > q;
