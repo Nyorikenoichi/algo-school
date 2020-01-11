@@ -9,8 +9,8 @@ string s1, s2, p;
 int main()
 {
     ios_base::sync_with_stdio(0);
-    //freopen("input.txt", "r", stdin);
-    //freopen("output.txt", "w", stdout);
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
     cin >> s1;
     n = s1.length();
     for(i = 0; i < n; i++)
