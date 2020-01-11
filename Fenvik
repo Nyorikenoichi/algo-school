@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+ 
+using namespace std;
+ 
+#define ll long long
+ll n, m, x, y, t[200000], i;
+string q;
+ 
+ll sum(ll r)
+{
+    ll res = 0;
+    for(; r > 0; r -= r & -r)
+        res += t[r];
+    return res;
+}
+ 
+ll sum(ll l, ll r)
+{
+    return sum(r) - sum(l - 1);
+}
+ 
+void add(ll k, ll x)
+{
+    for(; k <= n; k += k & -k)
+        t[k] += x;
+}
+ 
+int main()
+{
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
+    freopen("input.txt", "rt", stdin);
+    cin >> n >> m;
+    for(i = 0; i < m; i++)
+    {
+        cin >> q >> x >> y;
+        if(q == "add")
+            add(x, y);
+        else
+            cout << sum(x, y) << endl;
+    }
+    return 0;
+}
